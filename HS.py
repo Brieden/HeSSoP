@@ -4,11 +4,10 @@
 Helmet Streamer Simulation Program
 Created on Tue Aug  1 09:35:38 2017
 
-@author: sven
+@author: Sven Brieden
 
 Commentarios:
     - No uso cx,cy,cz por que creo que no es usado en HS.f
-    - Qué es As en linea 610 de HS.f es as?
 """
 
 import numpy as np
