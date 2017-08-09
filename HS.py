@@ -13,13 +13,9 @@ Commentarios:
 import numpy as np
 import matplotlib.pyplot as plt
 
-#from matplotlib import pyplot, cm
-#import mpl_toolkits.mplot3d.axes3d as p3
-#import matplotlib.animation as animation
+#def initall_condition():
+#    return vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez
 
-def initall_condition():
-
-    return vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez
 ###############################################################################
 #                                Parameter                                    #
 ###############################################################################
