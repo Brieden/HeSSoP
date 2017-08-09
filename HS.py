@@ -13,36 +13,54 @@ Commentarios:
 import numpy as np
 import matplotlib.pyplot as plt
 
-#def initall_condition():
+
+#def initial_condition(): # When the initial condition are ready we put them here
 #    return vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez
 
 ###############################################################################
 #                                Parameter                                    #
+# Set the paramater:                                                          #
+#       number of gridpoints:   N_x, N_y, N_z                                 #
+#       number of timesteps:    N_t                                           #
+#       simuletad box size:     x_min, x_max, y_min, y_max, z_min, z_max      #
+#       gamma:                                                                #
+#       mu:                                                                   #
 ###############################################################################
-
 N_x, N_y, N_z, N_t = 90, 60, 60, 5
 x_min, x_max, y_min, y_max, z_min, z_max = -0.5, 0.5, -0.5, 0.5, 0, 5
-gamma = 5 / 3
+gamma = 5/3
 mu = 1
 
 ###############################################################################
 #                                   Main                                      #
 ###############################################################################
 
+# calculate geometric step sizes
 delta_x, delta_y, delta_z =  (x_max - x_min)/N_x, (y_max - y_min)/N_y, (z_max - z_min)/N_z
 
+# generate grid coordinates
 x, y, z = np.linspace(x_min, x_max, N_x), np.linspace(y_min, y_max, N_y), np.linspace(z_min, z_max, N_z)
 X, Y, Z = np.meshgrid(y, x, z)
 
+# declare 4 dimensional array: [time, x, y, z]
+#       plasma velocity: vx, vy, vz     vector potential: ax, ay, az    magnetic field: bx, by, bz      
+#       electric field:  ex, ey, ez     current density:  jx, jy, jz    energy density: energy
+#       mass density:    rho            plasma pressure:  p             magn. resistivity: eta
+#       divergence of b:  gauss                           
 vx, vy, vz = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 ax, ay, az = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 bx, by, bz = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 ex, ey, ez = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 jx, jy, jz = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 energy, eta, gauss = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
-p, rho, gauss = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
+p, rho = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 
-#vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez = initall_condition()
+
+#vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez = initial_condition()
+###############################################################################
+#                         initial_condition                                   #
+# from HS.f translated                                                        #
+###############################################################################
 if 1:
     x0 = 0
     x02 = np.zeros((N_x, N_y, N_z))
@@ -128,29 +146,9 @@ if 1:
     ey[:] = eta[:]*jy[:]
     ez[:] = 0   
 
-
-
-plt.contour(bx[0,30])
-plt.yticks(range(20))
-
-#p = demo_p()
-#vx, vy ,vz = demo_v()
-#Ax, Ay ,Az = demo_v()
-#Bx, By ,Bz = demo_v()
-#dBx_dt, dBy_dt, dBz_dt = demo_v()
-
-
-
-
-
-
-
 ###############################################################################
-#                                  Cementerio                                 #
+#                                  plotting                                   #
 ###############################################################################
-
-#y, x, z = np.meshgrid(np.linspace(x_min, x_max, N_y),
-#                      np.linspace(y_min, y_max, N_x),
-#                      np.linspace(z_min, z_max, N_z))
-
+plt.contour(bx[0,int(N_x/2)])
+plt.show()
 
