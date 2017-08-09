@@ -148,7 +148,7 @@ if 1:
 # starting with the real main
 ###############################################################################
 for t_step in np.arange(1, N_t):
-    dt[t_step] = (0.5 * max(vx[t_step-1].max, vy[t_step-1].max, vz[t_step-1].max)/
+    dt[t_step] = (0.5 * max(vx[t_step-1].max(), vy[t_step-1].max(), vz[t_step-1].max())/
                      max(delta_x, delta_y, delta_z))
     
 ###############################################################################
