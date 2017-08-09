@@ -1,5 +1,5 @@
 # HeSSoP
-Helmet Streamer Simulation on Python
+**He**lmet **S**treamer **S**imulation **o**n **P**ython
 
 Copyright 2017 Francisco Frutos-Alfaro
 Universidad de Costa Rica
