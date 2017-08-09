@@ -46,7 +46,7 @@ X, Y, Z = np.meshgrid(y, x, z)
 #       plasma velocity: vx, vy, vz     vector potential: ax, ay, az    magnetic field: bx, by, bz      
 #       electric field:  ex, ey, ez     current density:  jx, jy, jz    energy density: energy
 #       mass density:    rho            plasma pressure:  p             magn. resistivity: eta
-#       divergence of b:  gauss                           
+#       divergence of b:  gauss                                 
 vx, vy, vz = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 ax, ay, az = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 bx, by, bz = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
@@ -54,7 +54,7 @@ ex, ey, ez = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.
 jx, jy, jz = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 energy, eta, gauss = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
 p, rho = np.zeros((N_t, N_x, N_y, N_z)), np.zeros((N_t, N_x, N_y, N_z))
-
+dt = np.zeros(N_t)
 
 #vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez = initial_condition()
 ###############################################################################
@@ -144,6 +144,13 @@ if 1:
     ey[:] = eta[:]*jy[:]
     ez[:] = 0   
 
+###############################################################################
+# starting with the real main
+###############################################################################
+for t_step in np.arange(1, N_t):
+    dt[t_step] = (0.5 * max(vx[t_step-1].max, vy[t_step-1].max, vz[t_step-1].max)/
+                     max(delta_x, delta_y, delta_z))
+    
 ###############################################################################
 #                                  plotting                                   #
 ###############################################################################
