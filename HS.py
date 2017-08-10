@@ -103,9 +103,7 @@ def initial_condition():
     return vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez
 
 def cfl_check():
-    """
-    Courant-Friedrichs-Lewy condition
-    """
+    """Courant-Friedrichs-Lewy condition"""
     dt[t_step] = (0.5 * max(vx[t_step-1].max(), vy[t_step-1].max(), vz[t_step-1].max())/
                      max(delta_x, delta_y, delta_z))
     if (0.001 <= dt[t_step] <= 2): 
@@ -113,6 +111,24 @@ def cfl_check():
               t_step, "is unusual: ", dt[t_step])
     return 
 
+def derivativ(field, dirección): 
+    """
+    1st order central differencing
+    """
+    if dirección == "x":
+        daxis = 0
+        delta = delta_x
+    elif dirección == "y":
+        daxis = 1
+        delta = delta_y
+    elif dirección == "z":
+        daxis = 2
+        delta = delta_z
+    else: 
+        print("fail")
+        return
+    return np.gradient(field, delta, axis=daxis)
+    
 ###############################################################################
 #                                Parameters                                   #
 # Set the paramater:                                                          #
@@ -136,7 +152,7 @@ delta_x, delta_y, delta_z =  (x_max - x_min)/N_x, (y_max - y_min)/N_y, (z_max - 
 
 # generate grid coordinates
 x, y, z = np.linspace(x_min, x_max, N_x), np.linspace(y_min, y_max, N_y), np.linspace(z_min, z_max, N_z)
-X, Y, Z = np.meshgrid(y, x, z)
+X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
 
 # declare 4 dimensional array: [time, x, y, z]
 #       plasma velocity: vx, vy, vz     vector potential: ax, ay, az    magnetic field: bx, by, bz      
@@ -174,6 +190,6 @@ for t_step in np.arange(1, N_t):
 ###############################################################################
 #                                  plotting                                   #
 ###############################################################################
-plt.contour(bx[0,int(N_x/2)], 40)#, extent=(-0.5, 0.5, 0, 5))
+plt.contour(bx[0, :, int(N_x/2)], 40)#, extent=(-0.5, 0.5, 0, 5))
 plt.show()
 
