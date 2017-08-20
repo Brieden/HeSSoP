@@ -171,19 +171,39 @@ dt = np.zeros(N_t)
 vx, vy, vz, ax, ay, az, bx, by, bz, ex, ey, ez = initial_condition()
 
 #       main time loop
-for t_step in np.arange(1, N_t):
+for t_step in np.arange( 0, N_t - 1 ):
     print("Starting with timestep ", t_step)
     cfl_check()    
     
 #   Motion Equation in X direction
 #   @t vx = (1/rho)*[J X B  - nabla p]_x - v.nabla vx
-    vx[t_step] = (
-                    vx[t_step - 1] 
-#                    + (xjxb[t_step - 1] - dpx[t_step - 1])/rho[t_step - 1] 
-#                    - vx[t_step - 1] * dvxx[t_step - 1] 
-#                    - vy[t_step - 1] * dvxy[t_step - 1] 
-#                    - vz[t_step - 1] * dvxz[t_step - 1]
-                )
+    vx[t_step + 1] = (  vx[t_step] 
+                        + (    jy[t_step] * bz[t_step] 
+                             - jz[t_step] * by[t_step]
+                             - derivativ(p[t_step], "x")
+                           )/rho[t_step]
+                        - vx[t_step] * derivativ(vx[t_step], "x")
+                        - vy[t_step] * derivativ(vx[t_step], "y") 
+                        - vz[t_step] * derivativ(vx[t_step], "z"))
+
+C     Motion Equation in Y direction
+C     
+C     @t vy = (1/rho)*[J X B  - nabla p]_y - v.nabla vy
+C      
+      vy(n+1,i,j,k) = vy(n,i,j,k) 
+     $     + (yjxb(n,i,j,k) - dpy(n,i,j,k))/rho(n,i,j,k) 
+     $     - vx(n,i,j,k)*dvyx(n,i,j,k) 
+     $     - vy(n,i,j,k)*dvyy(n,i,j,k) 
+     $     - vz(n,i,j,k)*dvyz(n,i,j,k) 
+C
+    vy[t_step + 1] = (  vy[t_step] 
+                        + (    jy[t_step] * bz[t_step] 
+                             - jz[t_step] * by[t_step]
+                             - derivativ(p[t_step], "x")
+                           )/rho[t_step]
+                        - vx[t_step] * derivativ(vy[t_step], "x")
+                        - vy[t_step] * derivativ(vy[t_step], "y") 
+                        - vz[t_step] * derivativ(vy[t_step], "z"))
 
     
     
